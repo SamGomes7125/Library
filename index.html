@@ -10,6 +10,42 @@
 
   <h1>My Library</h1>
   <div id="library-display"></div>
+  <button id="new-book-btn">+ New Book</button>
+
+<!-- Modal for adding new book -->
+<dialog id="book-dialog">
+  <form id="book-form" method="dialog">
+    <h2>Add a New Book</h2>
+
+    <label>
+      Title:
+      <input type="text" id="book-title" required>
+    </label>
+
+    <label>
+      Author:
+      <input type="text" id="book-author" required>
+    </label>
+
+    <label>
+      Pages:
+      <input type="number" id="book-pages" required>
+    </label>
+
+    <label>
+      Read:
+      <input type="checkbox" id="book-read">
+    </label>
+
+    <div class="form-buttons">
+      <button type="submit">Add Book</button>
+      <button type="button" id="cancel-btn">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="library-display"></div>
+
 
 
   <script src="script.js"></script>
