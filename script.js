@@ -34,3 +34,26 @@ function displayBooks() {
     container.appendChild(card);
   });
 }
+const dialog = document.getElementById("book-dialog");
+const newBookBtn = document.getElementById("new-book-btn");
+const cancelBtn = document.getElementById("cancel-btn");
+const form = document.getElementById("book-form");
+
+newBookBtn.addEventListener("click", () => dialog.showModal());
+
+cancelBtn.addEventListener("click", () => dialog.close());
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault(); // stop form from refreshing page
+
+  const title = document.getElementById("book-title").value;
+  const author = document.getElementById("book-author").value;
+  const pages = document.getElementById("book-pages").value;
+  const read = document.getElementById("book-read").checked;
+
+  addBookToLibrary(title, author, pages, read);
+
+  form.reset();
+  dialog.close();
+});
+
