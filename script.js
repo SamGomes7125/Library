@@ -1,59 +1,75 @@
+// Array to store all Book objects
 const myLibrary = [];
 
-// Book constructor
+// ---- BOOK CONSTRUCTOR ----
 function Book(title, author, pages, read) {
-  this.id = crypto.randomUUID();
+  this.id = crypto.randomUUID(); // unique stable ID
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.read = read;
 }
 
+Book.prototype.info = function () {
+  return `${this.title} by ${this.author}, ${this.pages} pages, ${
+    this.read ? "read" : "not read yet"
+  }`;
+};
+
+// ---- ADD BOOK TO LIBRARY ----
 function addBookToLibrary(title, author, pages, read) {
-  const newBook = new Book(title, author, pages, read);
-  myLibrary.push(newBook);
+  const book = new Book(title, author, pages, read);
+  myLibrary.push(book);
   displayBooks();
 }
 
-// Display books
+// ---- DISPLAY BOOKS ----
 function displayBooks() {
-  const container = document.getElementById("library-display");
-  container.innerHTML = "";
+  const container = document.querySelector(".books-container");
+  container.innerHTML = ""; // Clear previous content
 
   myLibrary.forEach((book) => {
     const card = document.createElement("div");
     card.classList.add("book-card");
+    card.setAttribute("data-id", book.id); // 🔥 Associate DOM with object
 
     card.innerHTML = `
       <h3>${book.title}</h3>
       <p><strong>Author:</strong> ${book.author}</p>
       <p><strong>Pages:</strong> ${book.pages}</p>
-      <p><strong>Read:</strong> ${book.read ? "Yes" : "No"}</p>
+      <p><strong>Status:</strong> ${book.read ? "Read ✔" : "Not read ❌"}</p>
+
+      <button class="remove-btn" data-id="${book.id}">
+        Remove
+      </button>
     `;
 
     container.appendChild(card);
   });
+
+  addRemoveListeners();
 }
-const dialog = document.getElementById("book-dialog");
-const newBookBtn = document.getElementById("new-book-btn");
-const cancelBtn = document.getElementById("cancel-btn");
-const form = document.getElementById("book-form");
 
-newBookBtn.addEventListener("click", () => dialog.showModal());
+// ---- REMOVE BOOK ----
+function addRemoveListeners() {
+  const removeButtons = document.querySelectorAll(".remove-btn");
 
-cancelBtn.addEventListener("click", () => dialog.close());
+  removeButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const idToRemove = e.target.getAttribute("data-id");
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault(); // stop form from refreshing page
+      // Remove from array
+      const index = myLibrary.findIndex((book) => book.id === idToRemove);
+      if (index !== -1) {
+        myLibrary.splice(index, 1);
+      }
 
-  const title = document.getElementById("book-title").value;
-  const author = document.getElementById("book-author").value;
-  const pages = document.getElementById("book-pages").value;
-  const read = document.getElementById("book-read").checked;
+      // Re-render UI
+      displayBooks();
+    });
+  });
+}
 
-  addBookToLibrary(title, author, pages, read);
-
-  form.reset();
-  dialog.close();
-});
-
+// ---- OPTIONAL: Add some starter books for testing ----
+addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, false);
+addBookToLibrary("Atomic Habits", "James Clear", 288, true);
