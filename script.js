@@ -38,3 +38,5 @@ function displayBooks() {
   });
 }
 
+addBookToLibrary("Harry Potter", "J.K. Rowling", 350, true);
+addBookToLibrary("Atomic Habits", "James Clear", 280, false);
