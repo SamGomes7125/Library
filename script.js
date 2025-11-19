@@ -3,7 +3,7 @@ const myLibrary = [];
 
 // ---- BOOK CONSTRUCTOR ----
 function Book(title, author, pages, read) {
-  this.id = crypto.randomUUID(); // unique stable ID
+  this.id = crypto.randomUUID(); 
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -16,6 +16,11 @@ Book.prototype.info = function () {
   }`;
 };
 
+// 🔥 NEW: Prototype function to toggle read status
+Book.prototype.toggleRead = function () {
+  this.read = !this.read;
+};
+
 // ---- ADD BOOK TO LIBRARY ----
 function addBookToLibrary(title, author, pages, read) {
   const book = new Book(title, author, pages, read);
@@ -26,18 +31,22 @@ function addBookToLibrary(title, author, pages, read) {
 // ---- DISPLAY BOOKS ----
 function displayBooks() {
   const container = document.querySelector(".books-container");
-  container.innerHTML = ""; // Clear previous content
+  container.innerHTML = ""; 
 
   myLibrary.forEach((book) => {
     const card = document.createElement("div");
     card.classList.add("book-card");
-    card.setAttribute("data-id", book.id); // 🔥 Associate DOM with object
+    card.setAttribute("data-id", book.id);
 
     card.innerHTML = `
       <h3>${book.title}</h3>
       <p><strong>Author:</strong> ${book.author}</p>
       <p><strong>Pages:</strong> ${book.pages}</p>
       <p><strong>Status:</strong> ${book.read ? "Read ✔" : "Not read ❌"}</p>
+
+      <button class="toggle-btn" data-id="${book.id}">
+        ${book.read ? "Mark as Unread" : "Mark as Read"}
+      </button>
 
       <button class="remove-btn" data-id="${book.id}">
         Remove
@@ -48,28 +57,37 @@ function displayBooks() {
   });
 
   addRemoveListeners();
+  addToggleListeners();
 }
 
-// ---- REMOVE BOOK ----
+// ---- REMOVE BUTTON ----
 function addRemoveListeners() {
-  const removeButtons = document.querySelectorAll(".remove-btn");
-
-  removeButtons.forEach((btn) => {
+  document.querySelectorAll(".remove-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const idToRemove = e.target.getAttribute("data-id");
-
-      // Remove from array
       const index = myLibrary.findIndex((book) => book.id === idToRemove);
-      if (index !== -1) {
-        myLibrary.splice(index, 1);
-      }
-
-      // Re-render UI
+      if (index !== -1) myLibrary.splice(index, 1);
       displayBooks();
     });
   });
 }
 
-// ---- OPTIONAL: Add some starter books for testing ----
+// ---- TOGGLE READ STATUS BUTTON ----
+function addToggleListeners() {
+  document.querySelectorAll(".toggle-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const id = e.target.getAttribute("data-id");
+      const book = myLibrary.find((b) => b.id === id);
+
+      if (book) {
+        book.toggleRead();   // 🔥 update object  
+      }
+
+      displayBooks();         // 🔄 re-render UI
+    });
+  });
+}
+
+// ---- sample data ----
 addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, false);
 addBookToLibrary("Atomic Habits", "James Clear", 288, true);
