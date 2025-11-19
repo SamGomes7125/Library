@@ -87,6 +87,38 @@ function addToggleListeners() {
     });
   });
 }
+// ---- FORM & MODAL LOGIC ----
+const dialog = document.getElementById("book-dialog");
+const newBookBtn = document.getElementById("new-book-btn");
+const cancelBtn = document.getElementById("cancel-btn");
+const form = document.getElementById("book-form");
+
+// Open modal
+newBookBtn.addEventListener("click", () => {
+  dialog.showModal();
+});
+
+// Close modal
+cancelBtn.addEventListener("click", () => {
+  dialog.close();
+  form.reset();
+});
+
+// Form submit
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const title = document.getElementById("book-title").value;
+  const author = document.getElementById("book-author").value;
+  const pages = document.getElementById("book-pages").value;
+  const read = document.getElementById("book-read").checked;
+
+  addBookToLibrary(title, author, pages, read);
+
+  dialog.close();
+  form.reset();
+});
+
 
 // ---- sample data ----
 addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, false);
