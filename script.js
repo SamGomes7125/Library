@@ -1,4 +1,9 @@
+// Store all books here
+const myLibrary = [];
+
+// Book constructor
 function Book(title, author, pages, hasRead) {
+  this.id = crypto.randomUUID(); // unique stable ID
   this.title = title;
   this.author = author;
   this.pages = pages;
@@ -9,3 +14,11 @@ function Book(title, author, pages, hasRead) {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${readStatus}`;
   };
 }
+
+// Function to add a new book to the library
+function addBookToLibrary(title, author, pages, hasRead) {
+  const newBook = new Book(title, author, pages, hasRead);
+  myLibrary.push(newBook);
+  return newBook; 
+}
+
